@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>チャットルーム</title>
+     % include("library.html")
     <style>
         .chat_area {
             overflow:auto;
@@ -17,23 +18,27 @@
 </head>
 <body>
 
-<h2>ChatApp</h2>
+<div class="container">
+    <h2>ChatApp</h2>
 
-<div id="chart_area" class="chat_area">
-    % for talk in talk_list:
-        % if talk["username"] == username:
-            <div class="talk" style="text-align:right;" title='{{ talk["talk_time"] }}'>{{ talk["username"] }}:{{ talk["chat_data"] }}</div>
-        % else:
-            <div class="talk" title='{{ talk["talk_time"] }}'>{{ talk["username"] }}:{{ talk["chat_data"] }}</div>
+    <div id="chart_area" class="chat_area row col-md-12">
+        % for talk in talk_list:
+            <div class="row">
+            % if talk["username"] == username:
+                <div class="talk alert alert-info pull-right" title='{{ talk["talk_time"] }}'>{{ talk["username"] }}:{{ talk["chat_data"] }}</div>
+            % else:
+                <div class="talk alert alert-success pull-left" title='{{ talk["talk_time"] }}'>{{ talk["username"] }}:{{ talk["chat_data"] }}</div>
+            % end
+            </div>
         % end
-    % end
-</div>
-<div id="input_area">
-    <form method="POST" action="/talk">
-        {{ username }} <input type="text" name="chat" /><input type="submit" value="送信" />
-    </form>
-</div>
+    </div>
 
+    <div id="input_area" class="row col-md-12">
+        <form method="POST" action="/talk">
+            {{ username }} <input type="text" name="chat" /><input type="submit" value="送信" />
+        </form>
+    </div>
+</div>
 
 </body>
 </html>

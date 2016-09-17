@@ -3,17 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <title>ChatApp</title>
+    % include("library.html")
 </head>
 <body>
-
-<h1>Welcome to ChatApp</h1>
-
-
-<form name="login_form" method="POST" action="/enter">
-    <input type="text" name="username" placeholder="ユーザ名" required /><br/>
-    <input type="submit" value="入室" />
-</form>
+<div class="container">
+    <h1>Welcome to ChatApp</h1>
 
 
+    <form name="login_form" method="POST" action="/enter">
+        <input type="text" name="username" placeholder="ユーザ名" required /><br/>
+        <input type="submit" value="入室" />
+    </form>
+
+</div>
 </body>
 </html>
