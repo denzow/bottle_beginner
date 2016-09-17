@@ -1,6 +1,7 @@
 # coding:utf-8
+import csv
+from datetime import datetime
 from bottle import route, run, template, request, response, redirect
-
 
 @route("/")
 def index():
@@ -49,11 +50,27 @@ def talk():
     chat_data = request.POST.getunicode("chat")
     # 発言者をcookieから取得
     username = request.get_cookie("username")
-
-    print(username, chat_data)
+    # 発言時間取得
+    talk_time = datetime.now()
+    # 発言保存
+    save_talk(talk_time, username, chat_data)
 
     return redirect("/chat_room")
 
+
+def save_talk(talk_time, username, chat_data):
+    """
+    チャットデータを永続化する関数
+    CSVとしてチャットの内容を書き込んでいる
+
+    :param username:
+    :param chat_data:
+    :param talk_time:
+    :return:
+    """
+    with open('./chat_data.csv', 'a') as f:
+        writer = csv.writer(f, lineterminator='\n')
+        writer.writerow([talk_time, username, chat_data])
 
 
 # サーバの起動
