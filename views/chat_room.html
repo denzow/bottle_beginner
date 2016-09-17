@@ -20,10 +20,9 @@
 <h2>ChatApp</h2>
 
 <div id="chart_area" class="chat_area">
-    <!-- チャットイメージをつかむためのダミーデータです -->
-    <div class="talk">user1:こんにちは</div>
-    <div class="talk">user2:よろしくおねがいします！</div>
-
+    % for talk in talk_list:
+        <div class="talk" title='{{ talk["talk_time"] }}'>{{ talk["username"] }}:{{ talk["chat_data"] }}</div>
+    % end
 </div>
 <div id="input_area">
     <form method="POST" action="/talk">
