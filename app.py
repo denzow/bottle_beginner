@@ -1,5 +1,5 @@
 # coding:utf-8
-from bottle import route, run
+from bottle import route, run, template
 
 
 @route('/')
@@ -26,7 +26,7 @@ def hello_name(name):
     :param name:
     :return:
     """
-    return "Hello {} !".format(name)
+    return "<h1>Hello {} !</h1>".format(name)
 
 
 @route("/no/<your_no:int>")
@@ -43,6 +43,26 @@ def no(your_no):
     """
 
     return "Your No is {} !".format(your_no)
+
+
+@route("/hello2/<name>")
+def hello2_name(name):
+    """
+    テンプレート機能を使うことでデザインとロジックを切り離すことができます。
+    bottleはシンプルなテンプレート機構が含まれているためすぐに利用できます。
+
+    標準では./views/配下から指定されたテンプレートを取得します。
+    その際拡張子はなんでも問題ありません。
+
+    テンプレート側に渡すデータは名前付きパラメータを使用します。
+    eg.
+    display_name="TEST NAME"
+
+    :param name:
+    :return:
+    """
+
+    return template("sample", display_name=name)
 
 
 # サーバの起動
