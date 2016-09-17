@@ -35,6 +35,10 @@ def chat_room():
     """
     # cookieからの取得はrequestから行う
     username = request.get_cookie("username")
+    # cookieにユーザ情報がない場合は入室画面へ戻す
+    if not username:
+        return redirect("/")
+
 
     # 永続化してあるこれまでのチャット履歴を取得
     talk_list = get_talk()
