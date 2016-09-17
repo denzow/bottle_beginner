@@ -36,7 +36,10 @@ def chat_room():
     # cookieからの取得はrequestから行う
     username = request.get_cookie("username")
 
-    return template("chat_room", username=username)
+    # 永続化してあるこれまでのチャット履歴を取得
+    talk_list = get_talk()
+
+    return template("chat_room", username=username, talk_list=talk_list)
 
 
 @route("/talk", method=["POST"])
@@ -72,6 +75,24 @@ def save_talk(talk_time, username, chat_data):
         writer = csv.writer(f, lineterminator='\n')
         writer.writerow([talk_time, username, chat_data])
 
+
+def get_talk():
+    """
+    永続化されたチャットデータを取得する関数
+    CSVからリスト形式でデータを取得している
+    :return:
+    """
+    talk_list = []
+    with open('./chat_data.csv', 'r') as f:
+        reader = csv.reader(f)
+        for row in reader:
+            talk_list.append({
+                "talk_time": row[0],
+                "username": row[1],
+                "chat_data": row[2],
+            })
+
+    return talk_list
 
 # サーバの起動
 run(host='localhost', port=8080, debug=True, reloader=True)
