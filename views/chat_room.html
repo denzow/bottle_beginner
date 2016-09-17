@@ -21,7 +21,11 @@
 
 <div id="chart_area" class="chat_area">
     % for talk in talk_list:
-        <div class="talk" title='{{ talk["talk_time"] }}'>{{ talk["username"] }}:{{ talk["chat_data"] }}</div>
+        % if talk["username"] == username:
+            <div class="talk" style="text-align:right;" title='{{ talk["talk_time"] }}'>{{ talk["username"] }}:{{ talk["chat_data"] }}</div>
+        % else:
+            <div class="talk" title='{{ talk["talk_time"] }}'>{{ talk["username"] }}:{{ talk["chat_data"] }}</div>
+        % end
     % end
 </div>
 <div id="input_area">

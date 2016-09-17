@@ -6,6 +6,9 @@ __pycache__/
 # C extensions
 *.so
 
+chat_data.csv
+*.db
+
 # Distribution / packaging
 .Python
 env/
