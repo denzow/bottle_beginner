@@ -45,7 +45,9 @@ def talk():
     :return:
     """
 
-    chat_data = request.POST.get("chat")
+    # マルチバイトデータのためgetではなくgetunicodeにする
+    chat_data = request.POST.getunicode("chat")
+    # 発言者をcookieから取得
     username = request.get_cookie("username")
 
     print(username, chat_data)
