@@ -1,6 +1,5 @@
 # coding:utf-8
-import bottle
-from bottle import route, run, template, request, response
+from bottle import route, run, template, request, response, redirect
 
 
 @route("/")
@@ -23,7 +22,20 @@ def enter():
     # cookieへの格納
     response.set_cookie("username", username)
 
-    return ""
+    return redirect("/chat_room")
+
+
+@route("/chat_room")
+def chat_room():
+    """
+    チャットを行う画面
+
+    :return:
+    """
+    # cookieからの取得はrequestから行う
+    username = request.get_cookie("username")
+
+    return template("chat_room", username=username)
 
 
 
