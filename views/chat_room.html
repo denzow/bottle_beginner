@@ -3,10 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <title>チャットルーム</title>
+    <style>
+        .chat_area {
+            overflow:auto;
+            border:solid;
+            width:400px;
+            height:500px;
+            vertical-align:bottom;
+            background-color: #DDDDDD;
+        }
+
+    </style>
 </head>
 <body>
 
-<h2>Welcome {{ username }}</h2>
+<h2>ChatApp</h2>
+
+<div id="chart_area" class="chat_area">
+    <!-- チャットイメージをつかむためのダミーデータです -->
+    <div class="talk">user1:こんにちは</div>
+    <div class="talk">user2:よろしくおねがいします！</div>
+
+</div>
+<div id="input_area">
+    <form method="POST" action="/talk">
+        {{ username }} <input type="text" name="chat" /><input type="submit" value="送信" />
+    </form>
+</div>
+
 
 </body>
 </html>
