@@ -38,6 +38,21 @@ def chat_room():
     return template("chat_room", username=username)
 
 
+@route("/talk", method=["POST"])
+def talk():
+    """
+    発言を登録し、チャットルームへリダイレクトします
+    :return:
+    """
+
+    chat_data = request.POST.get("chat")
+    username = request.get_cookie("username")
+
+    print(username, chat_data)
+
+    return redirect("/chat_room")
+
+
 
 # サーバの起動
 run(host='localhost', port=8080, debug=True, reloader=True)
