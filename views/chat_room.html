@@ -22,15 +22,7 @@
     <h2>ChatApp</h2>
 
     <div id="chart_area" class="chat_area row col-md-12">
-        % for talk in talk_list:
-            <div class="row">
-            % if talk["username"] == username:
-                <div class="talk alert alert-info pull-right" title='{{ talk["talk_time"] }}'>{{ talk["username"] }}:{{ talk["chat_data"] }}</div>
-            % else:
-                <div class="talk alert alert-success pull-left" title='{{ talk["talk_time"] }}'>{{ talk["username"] }}:{{ talk["chat_data"] }}</div>
-            % end
-            </div>
-        % end
+
     </div>
 
     <div id="input_area" class="row col-md-12">
@@ -42,8 +34,70 @@
 
 <script>
 
-    // 最下部へのスクロール
-    $('#chart_area').animate({scrollTop: $('#chart_area')[0].scrollHeight}, 0);
+    // ページ表示時に発言データを取得・表示する
+    $(document).ready(function(){
+        getTalkData();
+    });
+
+
+    // 発言データの取得
+    function getTalkData(){
+        $.ajax({
+            type: "GET",
+            url: "/api/talk",
+            dataType: "json"
+        }).done(function(data){
+            // JSONを受け取り各発言のDOMを構築する
+            for(var i in data){
+                appendTalkNode(data[i].talk_time, data[i].username, data[i].chat_data);
+            }
+        }).fail(function(data){
+            console.error(data);
+        });
+    }
+
+    // 発言データのDOMを追加する
+    function appendTalkNode(talkTime, userName, chatData){
+        // チャット表示領域
+        var chatArea = $("#chart_area")
+        // 発言の外側のDIV要素
+        var rowDiv = $("<div></div>", {"class": "row"})
+        // 発言の内側のDIV要素
+        var talkDiv;
+        // 自分の発言かどうかの分岐
+         if (userName == "{{username}}"){
+             talkDiv = $("<div></div>", {
+                "class": "talk alert alert-info pull-right col-md-5",
+                "style": "word-wrap: break-word",
+                "title": talkTime
+             })
+         }else{
+             talkDiv = $("<div></div>", {
+                "class": "talk alert alert-success pull-left col-md-5",
+                "style": "word-wrap: break-word",
+                "title": talkTime
+             })
+         }
+        // 発言内容をセット
+        talkDiv.text(userName + ":" + chatData);
+
+        // 内側のDIVを外側のDIVに追加
+        rowDiv.append(talkDiv)
+
+        // チャット表示領域に外側のDIVを追加
+        chatArea.append(rowDiv);
+
+        // 追加した発言の位置へスクロール
+        chatScrollBottom();
+    }
+
+
+    function chatScrollBottom(){
+        // 最下部へのスクロール
+        $('#chart_area').animate({scrollTop: $('#chart_area')[0].scrollHeight}, 0);
+
+    }
+
 
 </script>
 
