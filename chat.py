@@ -1,4 +1,5 @@
 # coding:utf-8
+import json
 import csv
 import os
 from datetime import datetime
@@ -64,6 +65,60 @@ def talk():
     save_talk(talk_time, username, chat_data)
 
     return redirect("/chat_room")
+
+
+@route("/api/talk", method=["GET", "POST"])
+def talk_api():
+    """
+    発言一覧を管理するAPI
+
+    GET -> 発言一覧を戻す
+    POST -> 発言を保存する
+
+    json eg.
+
+    [
+        {
+            talk_time:2016-09-17 15:00:49.937402
+            username:sayamada
+            chat_data:おはよう
+        }
+    :
+        },
+        {
+            talk_time:2016-09-17 15:58:03.200027
+            username:sayamada
+            chat_data:こんにちは
+        },
+        {
+            talk_time:2016-09-17 15:58:12.289631
+            username:sayamada
+            chat_data:元気ですか？
+        }
+
+    ]
+
+    :return:
+    """
+
+    if request.method == "GET":
+        talk_list = get_talk()
+        return json.dumps(talk_list)
+
+    elif request.method == "POST":
+        # マルチバイトデータのためgetではなくgetunicodeにする
+        chat_data = request.POST.getunicode("chat")
+        # 発言者をcookieから取得
+        username = request.get_cookie("username")
+        # 発言時間取得
+        talk_time = datetime.now()
+        # 発言保存
+        save_talk(talk_time, username, chat_data)
+
+        return json.dumps({
+            "status": "success"
+        })
+
 
 
 def save_talk(talk_time, username, chat_data):
