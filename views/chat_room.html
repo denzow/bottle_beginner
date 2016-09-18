@@ -26,7 +26,7 @@
     </div>
 
     <div id="input_area" class="row col-md-12">
-        <form method="POST" action="/talk">
+        <form method="POST" action="#" id="talkForm">
             {{ username }} <input type="text" name="chat" /><input type="submit" value="送信" />
         </form>
     </div>
@@ -39,6 +39,35 @@
         getTalkData();
     });
 
+    $("#talkForm").on("submit", function(event){
+        // 本来のformのsubmitを防止
+        event.preventDefault();
+        saveTalkData();
+
+    });
+
+    // 発言データの送信
+    function saveTalkData(){
+        $.ajax({
+            type: "POST",
+            url: "/api/talk",
+            data: {
+                "chat": $("input[name='chat']").val()
+            },
+            dataType: "json"
+        }).done(function(data){
+            if(data["status"] != "success"){
+                alert("ERROR");
+            }else{
+                // 入力欄のクリア
+                $("input[name='chat']").val("");
+                // チャット欄の更新
+                getTalkData();
+            }
+        }).fail(function(data){
+            console.error(data);
+        });
+    }
 
     // 発言データの取得
     function getTalkData(){
