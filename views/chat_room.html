@@ -33,18 +33,24 @@
 </div>
 
 <script>
+    // 最終発言のデータを格納する
+    var LAST_TALK = null;
 
     // ページ表示時に発言データを取得・表示する
     $(document).ready(function(){
         getTalkData();
     });
 
+    // フォームの更新を非同期通信に割り当て
     $("#talkForm").on("submit", function(event){
         // 本来のformのsubmitを防止
         event.preventDefault();
         saveTalkData();
 
     });
+
+    // 3秒毎に更新の有無をサーバに問合せる
+    setInterval(checkUpdate, 3000);
 
     // 発言データの送信
     function saveTalkData(){
@@ -77,8 +83,10 @@
             dataType: "json"
         }).done(function(data){
             // JSONを受け取り各発言のDOMを構築する
+            $("#chart_area").empty();
             for(var i in data){
                 appendTalkNode(data[i].talk_time, data[i].username, data[i].chat_data);
+                LAST_TALK = data[i];
             }
         }).fail(function(data){
             console.error(data);
@@ -118,6 +126,30 @@
 
         // 追加した発言の位置へスクロール
         chatScrollBottom();
+    }
+
+    // サーバ側とクライアント側で最後の発言を比較して
+    // 差があれば表示を更新する
+    function checkUpdate(){
+        $.ajax({
+            type: "GET",
+            url: "/api/last_talk",
+            dataType: "json"
+        }).done(function(data){
+
+            // 最後の発言の比較
+            if(data.username === LAST_TALK.username &&
+               data.talk_time === LAST_TALK.talk_time &&
+               data.chat_data === LAST_TALK.chat_data){
+                console.log("not need update");
+            }else{
+                // 更新を実行
+                getTalkData();
+            }
+
+        }).fail(function(data){
+            console.error(data);
+        });
     }
 
 

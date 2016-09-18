@@ -120,6 +120,16 @@ def talk_api():
         })
 
 
+@route("/api/last_talk")
+def get_last_talk():
+    """
+    最終発言だけを戻すAPI
+
+    :return:
+    """
+    talk_list = get_talk()
+    return json.dumps(talk_list[-1])
+
 
 def save_talk(talk_time, username, chat_data):
     """
