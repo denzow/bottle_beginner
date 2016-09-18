@@ -1,5 +1,6 @@
 # coding:utf-8
 import csv
+import os
 from datetime import datetime
 from bottle import route, run, template, request, response, redirect
 
@@ -87,6 +88,10 @@ def get_talk():
     :return:
     """
     talk_list = []
+    # 履歴ファイルがない場合は空ファイルを作成する
+    if not os.path.exists("./chat_data.csv"):
+        open("./chat_data.csv", "w").close()
+
     with open('./chat_data.csv', 'r') as f:
         reader = csv.reader(f)
         for row in reader:
