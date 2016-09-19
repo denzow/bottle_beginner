@@ -3,7 +3,7 @@ import json
 import csv
 import os
 from datetime import datetime
-from bottle import route, run, template, request, response, redirect
+from bottle import route, run, template, request, response, redirect, static_file
 
 @route("/")
 def index():
@@ -130,6 +130,16 @@ def get_last_talk():
     talk_list = get_talk()
     return json.dumps(talk_list[-1])
 
+
+@route('/static/<file_path:path>')
+def static(file_path):
+    """
+    静的ファイル専用のルーティング
+    /static/* は静的ファイルが存在するものとして動く
+    :param file_path:
+    :return:
+    """
+    return static_file(file_path, root="./static")
 
 def save_talk(talk_time, username, chat_data):
     """
